@@ -1,124 +1,107 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import Image from '../../../components/AppImage';
 import Button from '../../../components/ui/Button';
 import Icon from '../../../components/AppIcon';
 
-const TrendingProducts = ({ language = 'en' }) => {
+const TrendingProducts = () => {
+  const { t, i18n } = useTranslation();
   const [scrollPosition, setScrollPosition] = useState(0);
   const [canScrollLeft, setCanScrollLeft] = useState(false);
   const [canScrollRight, setCanScrollRight] = useState(true);
   const scrollContainerRef = useRef(null);
   const navigate = useNavigate();
 
-  const isRTL = language === 'ar';
+  const isRTL = i18n.language === 'ar';
 
   const products = [
     {
       id: 1,
-      name: "Wireless Bluetooth Headphones",
-      nameAr: "سماعات بلوتوث لاسلكية",
-      nameFr: "Écouteurs Bluetooth sans fil",
-      price: 89.99,
-      originalPrice: 129.99,
+      name: "Baby T-Shirt",
+      price: 15.99,
+      originalPrice: 19.99,
       currency: "$",
-      image: "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=300&h=300&fit=crop",
-      rating: 4.5,
-      reviewCount: 1234,
-      seller: "TechStore Global",
-      badge: "Best Seller",
-      discount: 31
+      image: "https://images.unsplash.com/photo-1599056436280-deddb2010ff9?w=300&h=300&fit=crop",
+      rating: 4.6,
+      reviewCount: 250,
+      seller: "TinyThreads",
+      badge: "New Arrival", // Badge text could be translated by using t(product.badgeKey) or similar
+      discount: 20,
+      size: "6-12 months",
+      gender: "Unisex"
     },
     {
       id: 2,
-      name: "Smart Fitness Watch",
-      nameAr: "ساعة ذكية للياقة البدنية",
-      nameFr: "Montre de fitness intelligente",
-      price: 199.99,
-      originalPrice: 249.99,
+      name: "Toddler Summer Dress",
+      price: 25.50,
       currency: "$",
-      image: "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=300&h=300&fit=crop",
-      rating: 4.7,
-      reviewCount: 856,
-      seller: "FitTech Pro",
-      badge: "Trending",
-      discount: 20
+      image: "https://images.unsplash.com/photo-1556905055-8f358a7a47b2?w=300&h=300&fit=crop",
+      rating: 4.8,
+      reviewCount: 180,
+      seller: "LittleBloom",
+      badge: "Popular",
+      size: "2-3 years",
+      gender: "Girl"
     },
     {
       id: 3,
-      name: "Organic Cotton T-Shirt",
-      nameAr: "قميص قطني عضوي",
-      nameFr: "T-shirt en coton biologique",
-      price: 24.99,
-      originalPrice: 34.99,
+      name: "Kids Graphic Hoodie",
+      price: 30.00,
+      originalPrice: 35.00,
       currency: "$",
-      image: "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=300&h=300&fit=crop",
-      rating: 4.3,
-      reviewCount: 432,
-      seller: "EcoFashion",
-      badge: "Eco-Friendly",
-      discount: 29
+      image: "https://images.unsplash.com/photo-1611003223101-8609a4738909?w=300&h=300&fit=crop",
+      rating: 4.5,
+      reviewCount: 320,
+      seller: "CoolKidz",
+      discount: 14,
+      size: "5-6 years",
+      gender: "Unisex"
     },
     {
       id: 4,
-      name: "Portable Coffee Maker",
-      nameAr: "صانعة قهوة محمولة",
-      nameFr: "Cafetière portable",
-      price: 45.99,
-      originalPrice: 59.99,
+      name: "School Uniform Polo Shirt",
+      price: 18.75,
       currency: "$",
-      image: "https://images.unsplash.com/photo-1559056199-641a0ac8b55e?w=300&h=300&fit=crop",
-      rating: 4.6,
-      reviewCount: 678,
-      seller: "BrewMaster",
-      badge: "New Arrival",
-      discount: 23
+      image: "https://images.unsplash.com/photo-1603252109302-529510058938?w=300&h=300&fit=crop",
+      rating: 4.3,
+      reviewCount: 450,
+      seller: "UniformPro",
+      badge: "Essential",
+      size: "7-8 years",
+      gender: "Boy"
     },
     {
       id: 5,
-      name: "LED Desk Lamp",
-      nameAr: "مصباح مكتب LED",
-      nameFr: "Lampe de bureau LED",
-      price: 32.99,
-      originalPrice: 42.99,
+      name: "Baby Soft Sole Shoes",
+      price: 22.00,
       currency: "$",
-      image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=300&h=300&fit=crop",
-      rating: 4.4,
-      reviewCount: 321,
-      seller: "LightCraft",
-      badge: "Energy Efficient",
-      discount: 23
+      image: "https://images.unsplash.com/photo-1511556532299-8f662fc26c06?w=300&h=300&fit=crop",
+      rating: 4.7,
+      reviewCount: 210,
+      seller: "PitterPatter",
+      badge: "Top Rated",
+      size: "0-6 months",
+      gender: "Unisex"
     },
     {
       id: 6,
-      name: "Wireless Phone Charger",
-      nameAr: "شاحن هاتف لاسلكي",
-      nameFr: "Chargeur de téléphone sans fil",
+      name: "Girls' Leggings (2-Pack)",
       price: 19.99,
-      originalPrice: 29.99,
+      originalPrice: 24.99,
       currency: "$",
-      image: "https://images.unsplash.com/photo-1609592806955-d4b5e5b6e5e5?w=300&h=300&fit=crop",
-      rating: 4.2,
-      reviewCount: 567,
-      seller: "ChargeTech",
-      badge: "Fast Charging",
-      discount: 33
+      image: "https://images.unsplash.com/photo-1600291289602-98a0453111d8?w=300&h=300&fit=crop",
+      rating: 4.4,
+      reviewCount: 150,
+      seller: "ComfyWear",
+      discount: 20,
+      size: "4-5 years",
+      gender: "Girl"
     }
   ];
 
-  const getProductName = (product) => {
-    switch (language) {
-      case 'ar':
-        return product.nameAr;
-      case 'fr':
-        return product.nameFr;
-      default:
-        return product.name;
-    }
-  };
-
   const formatPrice = (price, currency) => {
-    return language === 'ar' ? `${price} ${currency}` : `${currency}${price}`;
+    return isRTL ? `${price} ${currency}` : `${currency}${price}`;
   };
 
   const handleScroll = () => {
@@ -154,13 +137,11 @@ const TrendingProducts = ({ language = 'en' }) => {
 
   const handleAddToCart = (e, product) => {
     e.stopPropagation();
-    // Mock add to cart functionality
     console.log('Added to cart:', product.name);
   };
 
   const handleAddToWishlist = (e, product) => {
     e.stopPropagation();
-    // Mock add to wishlist functionality
     console.log('Added to wishlist:', product.name);
   };
 
@@ -190,20 +171,19 @@ const TrendingProducts = ({ language = 'en' }) => {
     for (let i = 0; i < remainingStars; i++) {
       stars.push(<Icon key={`empty-${i}`} name="Star" size={12} className="text-gray-300" />);
     }
-
     return stars;
   };
 
   return (
-    <div className="w-full">
+    <div className="w-full" dir={isRTL ? 'rtl' : 'ltr'}>
       {/* Section Header */}
       <div className={`flex items-center justify-between mb-6 ${isRTL ? 'flex-row-reverse' : ''}`}>
         <div className={isRTL ? 'text-right' : 'text-left'}>
           <h2 className="text-2xl font-bold text-text-primary font-heading mb-2">
-            {language === 'ar' ? 'المنتجات الرائجة' : language === 'fr' ? 'Produits tendance' : 'Trending Products'}
+            {t('trendingProducts.title')}
           </h2>
           <p className="text-text-secondary">
-            {language === 'ar' ? 'اكتشف أحدث المنتجات الشائعة' : language === 'fr' ? 'Découvrez les derniers produits populaires' : 'Discover the latest popular products'}
+            {t('trendingProducts.description')}
           </p>
         </div>
 
@@ -214,6 +194,7 @@ const TrendingProducts = ({ language = 'en' }) => {
             onClick={scrollLeft}
             disabled={!canScrollLeft}
             className="p-2 rounded-full"
+            aria-label={isRTL ? t('general.next') : t('general.previous')}
           >
             <Icon name={isRTL ? "ChevronRight" : "ChevronLeft"} size={20} />
           </Button>
@@ -222,6 +203,7 @@ const TrendingProducts = ({ language = 'en' }) => {
             onClick={scrollRight}
             disabled={!canScrollRight}
             className="p-2 rounded-full"
+            aria-label={isRTL ? t('general.previous') : t('general.next')}
           >
             <Icon name={isRTL ? "ChevronLeft" : "ChevronRight"} size={20} />
           </Button>
@@ -245,28 +227,26 @@ const TrendingProducts = ({ language = 'en' }) => {
               <div className="relative h-48 overflow-hidden rounded-t-lg">
                 <Image
                   src={product.image}
-                  alt={getProductName(product)}
+                  alt={product.name} // Product names are not translated in this iteration
                   className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                 />
                 
-                {/* Badge */}
                 {product.badge && (
                   <div className={`absolute top-3 ${isRTL ? 'right-3' : 'left-3'} bg-accent text-white text-xs px-2 py-1 rounded-full font-medium`}>
-                    {product.badge}
+                    {product.badge} {/* This could be t(product.badgeKey) if badges are meant to be translated */}
                   </div>
                 )}
 
-                {/* Discount Badge */}
                 {product.discount && (
                   <div className={`absolute top-3 ${isRTL ? 'left-3' : 'right-3'} bg-red-500 text-white text-xs px-2 py-1 rounded-full font-medium`}>
                     -{product.discount}%
                   </div>
                 )}
 
-                {/* Wishlist Button */}
                 <button
                   onClick={(e) => handleAddToWishlist(e, product)}
                   className={`absolute bottom-3 ${isRTL ? 'left-3' : 'right-3'} w-8 h-8 bg-white bg-opacity-90 hover:bg-opacity-100 rounded-full flex items-center justify-center transition-all duration-200 opacity-0 group-hover:opacity-100`}
+                  aria-label={t('productCard.addToWishlist')}
                 >
                   <Icon name="Heart" size={16} className="text-text-secondary hover:text-red-500" />
                 </button>
@@ -275,10 +255,9 @@ const TrendingProducts = ({ language = 'en' }) => {
               {/* Product Info */}
               <div className={`p-4 ${isRTL ? 'text-right' : 'text-left'}`}>
                 <h3 className="font-semibold text-text-primary text-sm mb-2 line-clamp-2 group-hover:text-primary transition-colors duration-200">
-                  {getProductName(product)}
+                  {product.name} {/* Product name remains as is */}
                 </h3>
 
-                {/* Rating */}
                 <div className={`flex items-center mb-2 ${isRTL ? 'flex-row-reverse' : ''}`}>
                   <div className={`flex items-center ${isRTL ? 'ml-2' : 'mr-2'}`}>
                     {renderStars(product.rating)}
@@ -288,12 +267,10 @@ const TrendingProducts = ({ language = 'en' }) => {
                   </span>
                 </div>
 
-                {/* Seller */}
                 <p className="text-xs text-text-secondary mb-3">
-                  {language === 'ar' ? 'بواسطة' : language === 'fr' ? 'par' : 'by'} {product.seller}
+                  {t('trendingProducts.bySeller', { sellerName: product.seller })}
                 </p>
 
-                {/* Price */}
                 <div className={`flex items-center justify-between ${isRTL ? 'flex-row-reverse' : ''}`}>
                   <div className={isRTL ? 'text-right' : 'text-left'}>
                     <span className="text-lg font-bold text-primary">
@@ -306,7 +283,6 @@ const TrendingProducts = ({ language = 'en' }) => {
                     )}
                   </div>
 
-                  {/* Add to Cart Button */}
                   <Button
                     variant="primary"
                     size="sm"
@@ -315,7 +291,7 @@ const TrendingProducts = ({ language = 'en' }) => {
                     iconName="ShoppingCart"
                     iconPosition="left"
                   >
-                    {language === 'ar' ? 'أضف' : language === 'fr' ? 'Ajouter' : 'Add'}
+                    {t('productCard.addToCart')}
                   </Button>
                 </div>
               </div>
@@ -346,7 +322,7 @@ const TrendingProducts = ({ language = 'en' }) => {
           iconName={isRTL ? "ChevronLeft" : "ChevronRight"}
           iconPosition="right"
         >
-          {language === 'ar' ? 'عرض جميع المنتجات الرائجة' : language === 'fr' ? 'Voir tous les produits tendance' : 'View All Trending Products'}
+          {t('trendingProducts.viewAll')}
         </Button>
       </div>
     </div>

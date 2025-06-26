@@ -8,6 +8,7 @@ import UserAuthenticationLoginRegister from "pages/user-authentication-login-reg
 import SellerDashboardInventoryManagement from "pages/seller-dashboard-inventory-management";
 import ProductCatalogSearch from "pages/product-catalog-search";
 import ProductDetails from "pages/product-details";
+import AdminDashboard from "pages/admin-dashboard"; // Import AdminDashboard
 import NotFound from "pages/NotFound";
 
 const Routes = () => {
@@ -23,6 +24,7 @@ const Routes = () => {
         <Route path="/seller-dashboard-inventory-management" element={<SellerDashboardInventoryManagement />} />
         <Route path="/product-catalog-search" element={<ProductCatalogSearch />} />
         <Route path="/product-details" element={<ProductDetails />} />
+        <Route path="/admin" element={<AdminDashboard />} /> {/* Add Admin Route */}
         <Route path="*" element={<NotFound />} />
       </RouterRoutes>
       </ErrorBoundary>

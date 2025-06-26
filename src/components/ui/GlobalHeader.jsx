@@ -1,49 +1,56 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import Icon from '../AppIcon';
 import Input from './Input';
 import Button from './Button';
 
-const GlobalHeader = ({ userRole = 'guest', isAuthenticated = false, language = 'en', onLanguageChange, onSearch }) => {
+const GlobalHeader = ({ userRole = 'guest', isAuthenticated = false, onSearch }) => {
+  const { t, i18n } = useTranslation();
   const [isSearchExpanded, setIsSearchExpanded] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false);
+  const [isLanguageMenuOpen, setIsLanguageMenuOpen] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
 
   const isAuthPage = location.pathname === '/user-authentication-login-register';
   const isDashboard = location.pathname.includes('dashboard');
+  const currentLanguage = i18n.language;
+  const isRTL = currentLanguage === 'ar';
 
   useEffect(() => {
     const handleClickOutside = (event) => {
-      if (!event.target.closest('.profile-menu-container')) {
-        setIsProfileMenuOpen(false);
-      }
-      if (!event.target.closest('.mobile-menu-container')) {
-        setIsMobileMenuOpen(false);
-      }
+      if (!event.target.closest('.profile-menu-container')) setIsProfileMenuOpen(false);
+      if (!event.target.closest('.language-menu-container')) setIsLanguageMenuOpen(false);
+      if (!event.target.closest('.mobile-menu-container')) setIsMobileMenuOpen(false);
     };
 
     document.addEventListener('click', handleClickOutside);
     return () => document.removeEventListener('click', handleClickOutside);
   }, []);
 
-  const handleSearch = (e) => {
+  useEffect(() => {
+    document.documentElement.lang = currentLanguage;
+    document.documentElement.dir = isRTL ? 'rtl' : 'ltr';
+  }, [currentLanguage, isRTL]);
+
+
+  const handleSearchSubmit = (e) => {
     e.preventDefault();
     if (searchQuery.trim()) {
       onSearch?.(searchQuery);
       navigate(`/product-catalog-search?q=${encodeURIComponent(searchQuery)}`);
+      setIsMobileMenuOpen(false);
     }
   };
 
-  const handleLogoClick = () => {
-    navigate('/marketplace-homepage');
-  };
-
+  const handleLogoClick = () => navigate('/marketplace-homepage');
   const handleNavigation = (path) => {
     navigate(path);
     setIsMobileMenuOpen(false);
+    setIsProfileMenuOpen(false);
   };
 
   const languages = [
@@ -52,83 +59,117 @@ const GlobalHeader = ({ userRole = 'guest', isAuthenticated = false, language = 
     { code: 'fr', name: 'Français', flag: '🇫🇷' }
   ];
 
+  const changeLanguage = (langCode) => {
+    i18n.changeLanguage(langCode);
+    setIsLanguageMenuOpen(false);
+    setIsMobileMenuOpen(false);
+  };
+
   const publicNavItems = [
-    { label: 'Home', path: '/marketplace-homepage', icon: 'Home' },
-    { label: 'Products', path: '/product-catalog-search', icon: 'Package' },
-    { label: 'Categories', path: '/product-catalog-search?view=categories', icon: 'Grid3X3' }
+    { labelKey: 'navigation.home', path: '/marketplace-homepage', icon: 'Home' },
+    { labelKey: 'navigation.products', path: '/product-catalog-search', icon: 'Package' },
+    { labelKey: 'navigation.categories', path: '/product-catalog-search?view=categories', icon: 'Grid3X3' }
   ];
 
   const dashboardNavItems = {
     seller: [
-      { label: 'Dashboard', path: '/seller-dashboard-inventory-management', icon: 'BarChart3' },
-      { label: 'Marketplace', path: '/marketplace-homepage', icon: 'Store' }
+      { labelKey: 'navigation.dashboard', path: '/seller-dashboard-inventory-management', icon: 'BarChart3' },
+      { labelKey: 'navigation.marketplace', path: '/marketplace-homepage', icon: 'Store' }
     ],
     admin: [
-      { label: 'Admin Panel', path: '/admin-dashboard-management', icon: 'Settings' },
-      { label: 'Marketplace', path: '/marketplace-homepage', icon: 'Store' }
+      { labelKey: 'navigation.adminPanel', path: '/admin', icon: 'Settings' }, // Updated path to /admin
+      { labelKey: 'navigation.marketplace', path: '/marketplace-homepage', icon: 'Store' }
     ]
   };
+
+  const profileMenuItems = [
+      { labelKey: 'profile.settings', action: () => handleNavigation('/profile-settings') },
+      { labelKey: 'profile.orderHistory', action: () => handleNavigation('/order-history') },
+  ];
 
   const renderLogo = () => (
     <div 
       className="flex items-center cursor-pointer group"
       onClick={handleLogoClick}
+      aria-label={t('ariaLabels.navigateToHome')}
     >
-      <div className="flex items-center justify-center w-10 h-10 bg-primary rounded-lg mr-3 group-hover:bg-primary-700 transition-colors duration-200">
+      <div className="flex items-center justify-center w-10 h-10 bg-primary rounded-lg group-hover:bg-primary-700 transition-colors duration-200">
         <Icon name="Globe" size={24} color="white" />
       </div>
-      <div className="flex flex-col">
+      <div className={`flex flex-col ${isRTL ? 'mr-3 text-right' : 'ml-3 text-left'}`}>
         <span className="text-xl font-bold text-primary font-heading">GlobalMarket</span>
-        <span className="text-xs text-text-secondary font-caption -mt-1">Worldwide Commerce</span>
+        <span className="text-xs text-text-secondary font-caption -mt-1">{t('header.tagline')}</span>
       </div>
     </div>
   );
 
   const renderSearchBar = () => {
     if (isAuthPage) return null;
-
     return (
-      <div className={`flex-1 max-w-2xl mx-4 ${isDashboard ? 'hidden lg:block' : ''}`}>
-        <form onSubmit={handleSearch} className="relative">
+      <div className={`flex-1 max-w-2xl ${isRTL ? 'ml-4' : 'mr-4'} ${isDashboard ? 'hidden lg:block' : ''}`}>
+        <form onSubmit={handleSearchSubmit} className="relative">
           <div className="relative">
             <Input
               type="search"
-              placeholder="Search products, brands, categories..."
+              placeholder={t('header.searchPlaceholder')}
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-12 pr-4 py-3 bg-background border-border rounded-lg focus:ring-2 focus:ring-primary-200 focus:border-primary transition-all duration-200"
+              className={`w-full py-3 bg-background border-border rounded-lg focus:ring-2 focus:ring-primary-200 focus:border-primary transition-all duration-200 ${isRTL ? 'pr-12 pl-4 text-right' : 'pl-12 pr-4 text-left'}`}
             />
             <Icon 
               name="Search" 
               size={20} 
-              className="absolute left-4 top-1/2 transform -translate-y-1/2 text-text-secondary"
+              className={`absolute top-1/2 transform -translate-y-1/2 text-text-secondary ${isRTL ? 'right-4' : 'left-4'}`}
             />
           </div>
           <Button
             type="submit"
             variant="primary"
-            className="absolute right-2 top-1/2 transform -translate-y-1/2 px-4 py-1.5"
+            className={`absolute top-1/2 transform -translate-y-1/2 px-4 py-1.5 ${isRTL ? 'left-2' : 'right-2'}`}
           >
-            Search
+            {t('header.searchButton')}
           </Button>
         </form>
       </div>
     );
   };
 
-  const renderLanguageSelector = () => (
-    <div className="relative">
+  const renderLanguageSelector = (isMobile = false) => (
+    <div className={`relative language-menu-container ${isMobile ? 'w-full' : ''}`}>
       <Button
         variant="ghost"
-        onClick={() => setIsProfileMenuOpen(!isProfileMenuOpen)}
-        className="flex items-center space-x-2 px-3 py-2"
+        onClick={() => setIsLanguageMenuOpen(!isLanguageMenuOpen)}
+        className={`flex items-center space-x-2 px-3 py-2 ${isMobile ? 'justify-between w-full' : ''}`}
+        aria-expanded={isLanguageMenuOpen}
+        aria-haspopup="true"
+        aria-label={t('ariaLabels.selectLanguage')}
       >
-        <span className="text-lg">{languages.find(lang => lang.code === language)?.flag}</span>
-        <span className="hidden sm:inline text-sm font-medium">
-          {languages.find(lang => lang.code === language)?.name}
-        </span>
+        <div className="flex items-center space-x-2">
+            <span className="text-lg">{languages.find(lang => lang.code === currentLanguage)?.flag}</span>
+            {!isMobile && <span className="hidden sm:inline text-sm font-medium">
+            {languages.find(lang => lang.code === currentLanguage)?.name}
+            </span>}
+        </div>
         <Icon name="ChevronDown" size={16} />
       </Button>
+      {isLanguageMenuOpen && (
+        <div className={`absolute mt-2 w-48 bg-surface border border-border rounded-lg shadow-lg z-dropdown animate-slide-down ${isMobile ? 'left-0 right-0' : (isRTL ? 'left-0' : 'right-0')}`}>
+          <ul className="py-1">
+            {languages.map((lang) => (
+              <li key={lang.code}>
+                <button
+                  onClick={() => changeLanguage(lang.code)}
+                  className={`w-full text-left px-4 py-2 text-sm flex items-center space-x-3 hover:bg-surface-hover transition-colors duration-200 ${currentLanguage === lang.code ? 'font-semibold text-primary' : 'text-text-primary'}`}
+                >
+                  <span className="text-lg">{lang.flag}</span>
+                  <span>{lang.name}</span>
+                  {currentLanguage === lang.code && <Icon name="Check" size={16} className="text-primary ml-auto" />}
+                </button>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
     </div>
   );
 
@@ -137,39 +178,36 @@ const GlobalHeader = ({ userRole = 'guest', isAuthenticated = false, language = 
 
     if (!isAuthenticated) {
       return (
-        <div className="flex items-center space-x-2">
+        <div className={`flex items-center ${isRTL ? 'space-x-reverse space-x-2' : 'space-x-2'}`}>
           <Button
             variant="ghost"
             onClick={() => handleNavigation('/user-authentication-login-register')}
             className="hidden sm:flex"
           >
-            Sign In
+            {t('auth.signIn')}
           </Button>
           <Button
             variant="primary"
             onClick={() => handleNavigation('/user-authentication-login-register')}
           >
-            Join Now
+            {t('auth.joinNow')}
           </Button>
         </div>
       );
     }
 
     return (
-      <div className="flex items-center space-x-4">
+      <div className={`flex items-center ${isRTL ? 'space-x-reverse space-x-4' : 'space-x-4'}`}>
         {!isDashboard && (
           <>
-            <Button variant="ghost" className="relative p-2">
+            <Button variant="ghost" className="relative p-2" aria-label={t('ariaLabels.wishlist')} onClick={() => handleNavigation('/wishlist')}>
               <Icon name="Heart" size={20} />
-              <span className="absolute -top-1 -right-1 bg-accent text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
-                3
-              </span>
+              {/* Dynamic count can be added later */}
+              <span className="absolute -top-1 -right-1 bg-accent text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">3</span>
             </Button>
-            <Button variant="ghost" className="relative p-2">
+            <Button variant="ghost" className="relative p-2" aria-label={t('ariaLabels.cart')} onClick={() => handleNavigation('/cart')}>
               <Icon name="ShoppingCart" size={20} />
-              <span className="absolute -top-1 -right-1 bg-accent text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
-                2
-              </span>
+              <span className="absolute -top-1 -right-1 bg-accent text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">2</span>
             </Button>
           </>
         )}
@@ -179,6 +217,9 @@ const GlobalHeader = ({ userRole = 'guest', isAuthenticated = false, language = 
             variant="ghost"
             onClick={() => setIsProfileMenuOpen(!isProfileMenuOpen)}
             className="flex items-center space-x-2 p-2"
+            aria-expanded={isProfileMenuOpen}
+            aria-haspopup="true"
+            aria-label={t('ariaLabels.userMenu')}
           >
             <div className="w-8 h-8 bg-primary-100 rounded-full flex items-center justify-center">
               <Icon name="User" size={16} color="var(--color-primary)" />
@@ -187,37 +228,43 @@ const GlobalHeader = ({ userRole = 'guest', isAuthenticated = false, language = 
           </Button>
 
           {isProfileMenuOpen && (
-            <div className="absolute right-0 mt-2 w-48 bg-surface border border-border rounded-lg shadow-lg z-dropdown animate-slide-down">
-              <div className="py-2">
-                <div className="px-4 py-2 border-b border-border">
-                  <p className="text-sm font-medium text-text-primary">John Doe</p>
-                  <p className="text-xs text-text-secondary">john@example.com</p>
+            <div className={`absolute mt-2 w-56 bg-surface border border-border rounded-lg shadow-lg z-dropdown animate-slide-down ${isRTL ? 'left-0' : 'right-0'}`}>
+              <div className="py-1">
+                <div className={`px-4 py-3 border-b border-border ${isRTL ? 'text-right' : 'text-left'}`}>
+                  <p className="text-sm font-medium text-text-primary truncate">John Doe</p> {/* Placeholder */}
+                  <p className="text-xs text-text-secondary truncate">john@example.com</p> {/* Placeholder */}
                 </div>
-                <button className="w-full text-left px-4 py-2 text-sm text-text-primary hover:bg-surface-hover transition-colors duration-200">
-                  Profile Settings
-                </button>
-                <button className="w-full text-left px-4 py-2 text-sm text-text-primary hover:bg-surface-hover transition-colors duration-200">
-                  Order History
-                </button>
+                {profileMenuItems.map(item => (
+                    <button
+                        key={item.labelKey}
+                        onClick={item.action}
+                        className={`w-full px-4 py-2 text-sm text-text-primary hover:bg-surface-hover transition-colors duration-200 ${isRTL ? 'text-right' : 'text-left'}`}
+                    >
+                        {t(item.labelKey)}
+                    </button>
+                ))}
                 {userRole === 'seller' && (
                   <button 
                     onClick={() => handleNavigation('/seller-dashboard-inventory-management')}
-                    className="w-full text-left px-4 py-2 text-sm text-text-primary hover:bg-surface-hover transition-colors duration-200"
+                    className={`w-full px-4 py-2 text-sm text-text-primary hover:bg-surface-hover transition-colors duration-200 ${isRTL ? 'text-right' : 'text-left'}`}
                   >
-                    Seller Dashboard
+                    {t('navigation.sellerDashboard')}
                   </button>
                 )}
                 {userRole === 'admin' && (
                   <button 
-                    onClick={() => handleNavigation('/admin-dashboard-management')}
-                    className="w-full text-left px-4 py-2 text-sm text-text-primary hover:bg-surface-hover transition-colors duration-200"
+                    onClick={() => handleNavigation('/admin')}
+                    className={`w-full px-4 py-2 text-sm text-text-primary hover:bg-surface-hover transition-colors duration-200 ${isRTL ? 'text-right' : 'text-left'}`}
                   >
-                    Admin Panel
+                    {t('navigation.adminPanel')}
                   </button>
                 )}
-                <div className="border-t border-border mt-2 pt-2">
-                  <button className="w-full text-left px-4 py-2 text-sm text-error hover:bg-error-50 transition-colors duration-200">
-                    Sign Out
+                <div className="border-t border-border mt-1 pt-1">
+                  <button
+                    onClick={() => console.log("Sign out clicked")} // Replace with actual sign out logic
+                    className={`w-full px-4 py-2 text-sm text-error hover:bg-error-50 transition-colors duration-200 ${isRTL ? 'text-right' : 'text-left'}`}
+                  >
+                    {t('auth.signOut')}
                   </button>
                 </div>
               </div>
@@ -228,85 +275,124 @@ const GlobalHeader = ({ userRole = 'guest', isAuthenticated = false, language = 
     );
   };
 
+  const renderMobileMenuNavItems = (items) => items.map((item) => (
+    <button
+      key={item.path}
+      onClick={() => handleNavigation(item.path)}
+      className={`flex items-center space-x-3 w-full px-3 py-3 text-text-primary hover:bg-surface-hover rounded-lg transition-colors duration-200 ${isRTL ? 'flex-row-reverse space-x-reverse text-right' : 'text-left'}`}
+    >
+      <Icon name={item.icon} size={20} />
+      <span>{t(item.labelKey)}</span>
+    </button>
+  ));
+
+
   const renderMobileMenu = () => (
     <div className="lg:hidden">
       <Button
         variant="ghost"
         onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
         className="p-2 mobile-menu-container"
+        aria-expanded={isMobileMenuOpen}
+        aria-controls="mobile-menu"
+        aria-label={t('ariaLabels.toggleMobileMenu')}
       >
         <Icon name={isMobileMenuOpen ? "X" : "Menu"} size={24} />
       </Button>
 
       {isMobileMenuOpen && (
-        <div className="absolute top-full left-0 right-0 bg-surface border-t border-border shadow-lg z-mobile-overlay animate-slide-down">
+        <div id="mobile-menu" className="absolute top-full left-0 right-0 bg-surface border-t border-border shadow-lg z-mobile-overlay animate-slide-down max-h-[calc(100vh-var(--h-header))] overflow-y-auto">
           <div className="px-4 py-4">
             {!isAuthPage && (
               <div className="mb-4">
-                <form onSubmit={handleSearch}>
+                <form onSubmit={handleSearchSubmit}>
                   <div className="relative">
                     <Input
                       type="search"
-                      placeholder="Search products..."
+                      placeholder={t('header.searchPlaceholderMobile')}
                       value={searchQuery}
                       onChange={(e) => setSearchQuery(e.target.value)}
-                      className="w-full pl-10 pr-4 py-2"
+                      className={`w-full py-2 border-border focus:border-primary ${isRTL ? 'pr-10 pl-3 text-right' : 'pl-10 pr-3 text-left'}`}
                     />
                     <Icon 
                       name="Search" 
                       size={18} 
-                      className="absolute left-3 top-1/2 transform -translate-y-1/2 text-text-secondary"
+                      className={`absolute top-1/2 transform -translate-y-1/2 text-text-secondary ${isRTL ? 'right-3' : 'left-3'}`}
                     />
                   </div>
                 </form>
               </div>
             )}
 
-            <nav className="space-y-2">
-              {isDashboard ? (
-                dashboardNavItems[userRole]?.map((item) => (
-                  <button
-                    key={item.path}
-                    onClick={() => handleNavigation(item.path)}
-                    className="flex items-center space-x-3 w-full px-3 py-2 text-left text-text-primary hover:bg-surface-hover rounded-lg transition-colors duration-200"
-                  >
-                    <Icon name={item.icon} size={20} />
-                    <span>{item.label}</span>
-                  </button>
-                ))
-              ) : (
-                publicNavItems.map((item) => (
-                  <button
-                    key={item.path}
-                    onClick={() => handleNavigation(item.path)}
-                    className="flex items-center space-x-3 w-full px-3 py-2 text-left text-text-primary hover:bg-surface-hover rounded-lg transition-colors duration-200"
-                  >
-                    <Icon name={item.icon} size={20} />
-                    <span>{item.label}</span>
-                  </button>
-                ))
-              )}
+            <nav className="space-y-1">
+              {isDashboard
+                ? renderMobileMenuNavItems(dashboardNavItems[userRole] || [])
+                : renderMobileMenuNavItems(publicNavItems)
+              }
             </nav>
 
             <div className="mt-4 pt-4 border-t border-border">
-              <div className="flex items-center justify-between">
-                <span className="text-sm font-medium text-text-primary">Language</span>
-                <div className="flex space-x-2">
-                  {languages.map((lang) => (
-                    <button
-                      key={lang.code}
-                      onClick={() => onLanguageChange?.(lang.code)}
-                      className={`px-2 py-1 text-xs rounded ${
-                        language === lang.code 
-                          ? 'bg-primary text-white' :'bg-surface-hover text-text-secondary'
-                      }`}
-                    >
-                      {lang.flag} {lang.code.toUpperCase()}
-                    </button>
-                  ))}
-                </div>
-              </div>
+              {renderLanguageSelector(true)}
             </div>
+
+            {isAuthenticated && (
+                 <div className="mt-4 pt-4 border-t border-border space-y-1">
+                    {profileMenuItems.map(item => (
+                        <button
+                            key={item.labelKey}
+                            onClick={item.action}
+                            className={`flex items-center space-x-3 w-full px-3 py-3 text-text-primary hover:bg-surface-hover rounded-lg transition-colors duration-200 ${isRTL ? 'flex-row-reverse space-x-reverse text-right' : 'text-left'}`}
+                        >
+                           {/* Consider adding icons to mobile profile items too */}
+                           <span>{t(item.labelKey)}</span>
+                        </button>
+                    ))}
+                    {userRole === 'seller' && (
+                      <button
+                        onClick={() => handleNavigation('/seller-dashboard-inventory-management')}
+                        className={`flex items-center space-x-3 w-full px-3 py-3 text-text-primary hover:bg-surface-hover rounded-lg transition-colors duration-200 ${isRTL ? 'flex-row-reverse space-x-reverse text-right' : 'text-left'}`}
+                      >
+                        <Icon name="BarChart3" size={20}/>
+                        <span>{t('navigation.sellerDashboard')}</span>
+                      </button>
+                    )}
+                    {userRole === 'admin' && (
+                      <button
+                        onClick={() => handleNavigation('/admin')}
+                         className={`flex items-center space-x-3 w-full px-3 py-3 text-text-primary hover:bg-surface-hover rounded-lg transition-colors duration-200 ${isRTL ? 'flex-row-reverse space-x-reverse text-right' : 'text-left'}`}
+                      >
+                        <Icon name="Settings" size={20}/>
+                        <span>{t('navigation.adminPanel')}</span>
+                      </button>
+                    )}
+                     <button
+                        onClick={() => console.log("Sign out clicked")}
+                        className={`flex items-center space-x-3 w-full px-3 py-3 text-error hover:bg-error-50 rounded-lg transition-colors duration-200 ${isRTL ? 'flex-row-reverse space-x-reverse text-right' : 'text-left'}`}
+                     >
+                        <Icon name="LogOut" size={20}/>
+                        <span>{t('auth.signOut')}</span>
+                    </button>
+                 </div>
+            )}
+            {!isAuthenticated && !isAuthPage && (
+                <div className="mt-6 space-y-3">
+                     <Button
+                        variant="primary"
+                        onClick={() => handleNavigation('/user-authentication-login-register')}
+                        className="w-full"
+                    >
+                        {t('auth.joinNow')}
+                    </Button>
+                    <Button
+                        variant="outline"
+                        onClick={() => handleNavigation('/user-authentication-login-register')}
+                        className="w-full"
+                    >
+                        {t('auth.signIn')}
+                    </Button>
+                </div>
+            )}
+
           </div>
         </div>
       )}
@@ -314,33 +400,36 @@ const GlobalHeader = ({ userRole = 'guest', isAuthenticated = false, language = 
   );
 
   return (
-    <header className="nav-header fixed top-0 left-0 right-0 z-header">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <header className="nav-header fixed top-0 left-0 right-0 z-header bg-surface border-b border-border shadow-sm">
+      <div className="max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-header">
-          {renderLogo()}
+          <div className={`flex items-center ${isRTL ? 'ml-4' : 'mr-4'}`}>
+            {renderLogo()}
+          </div>
           
           {!isAuthPage && !isDashboard && (
-            <nav className="hidden lg:flex items-center space-x-8">
+            <nav className={`hidden lg:flex items-center ${isRTL ? 'space-x-reverse space-x-6' : 'space-x-6'}`}>
               {publicNavItems.map((item) => (
                 <button
                   key={item.path}
                   onClick={() => handleNavigation(item.path)}
-                  className={`flex items-center space-x-2 px-3 py-2 text-sm font-medium rounded-lg transition-colors duration-200 ${
-                    location.pathname === item.path
-                      ? 'text-primary bg-primary-50' :'text-text-primary hover:text-primary hover:bg-surface-hover'
-                  }`}
+                  className={`flex items-center space-x-2 px-3 py-2 text-sm font-medium rounded-lg transition-colors duration-200 ${ location.pathname === item.path ? 'text-primary bg-primary-50' : 'text-text-primary hover:text-primary hover:bg-surface-hover'} ${isRTL ? 'flex-row-reverse space-x-reverse' : ''}`}
                 >
                   <Icon name={item.icon} size={18} />
-                  <span>{item.label}</span>
+                  <span>{t(item.labelKey)}</span>
                 </button>
               ))}
             </nav>
           )}
 
-          {renderSearchBar()}
+          <div className="flex-grow flex justify-center">
+            {renderSearchBar()}
+          </div>
 
-          <div className="flex items-center space-x-4">
-            {renderLanguageSelector()}
+          <div className={`flex items-center ${isRTL ? 'space-x-reverse space-x-2 sm:space-x-3' : 'space-x-2 sm:space-x-3'}`}>
+            <div className="hidden lg:block">
+              {renderLanguageSelector()}
+            </div>
             {renderUserActions()}
             {renderMobileMenu()}
           </div>

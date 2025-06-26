@@ -1,0 +1,105 @@
+{
+  "trendingProducts": {
+    "title": "Trending Products",
+    "description": "Discover the latest popular products",
+    "viewAll": "View All Trending Products",
+    "bySeller": "by {{sellerName}}"
+  },
+  "productCard": {
+    "addToCart": "Add to Cart",
+    "addToWishlist": "Add to Wishlist",
+    "removeFromWishlist": "Remove from Wishlist",
+    "outOfStock": "Out of Stock",
+    "onlyLeft": "Only {{count}} left",
+    "quickAdd": "Quick Add",
+    "selectOption": "Select Option",
+    "cancel": "Cancel",
+    "freeShipping": "Free Shipping"
+  },
+  "navigation": {
+    "home": "Home",
+    "products": "Products",
+    "categories": "Categories",
+    "account": "Account",
+    "cart": "Cart",
+    "admin": "Admin"
+  },
+  "product": {
+    "size": "Size",
+    "gender": "Gender",
+    "unisex": "Unisex",
+    "boy": "Boy",
+    "girl": "Girl"
+  },
+  "general": {
+    "loading": "Loading...",
+    "next": "Next",
+    "previous": "Previous"
+  },
+  "header": {
+    "tagline": "Worldwide Commerce",
+    "searchPlaceholder": "Search products, brands, categories...",
+    "searchPlaceholderMobile": "Search products...",
+    "searchButton": "Search"
+  },
+  "auth": {
+    "signIn": "Sign In",
+    "joinNow": "Join Now",
+    "signOut": "Sign Out"
+  },
+  "profile": {
+    "settings": "Profile Settings",
+    "orderHistory": "Order History"
+  },
+  "ariaLabels": {
+    "navigateToHome": "Navigate to Homepage",
+    "selectLanguage": "Select Language",
+    "userMenu": "User Menu",
+    "wishlist": "Wishlist",
+    "cart": "Shopping Cart",
+    "toggleMobileMenu": "Toggle mobile menu"
+  },
+  "navigation": {
+    "home": "Home",
+    "products": "Products",
+    "categories": "Categories",
+    "account": "Account",
+    "cart": "Cart",
+    "admin": "Admin",
+    "dashboard": "Dashboard",
+    "marketplace": "Marketplace",
+    "adminPanel": "Admin Panel",
+    "sellerDashboard": "Seller Dashboard"
+  },
+  "adminDashboard": {
+    "title": "Admin Dashboard",
+    "subtitle": "Manage your marketplace operations.",
+    "viewProducts": {
+      "title": "View All Products",
+      "description": "Browse and filter all products in the system."
+    },
+    "productManagement": {
+      "title": "Product Management",
+      "description": "Add, edit, or delete products."
+    },
+    "revenueAnalytics": {
+      "title": "Revenue Analytics",
+      "description": "View total revenue, capital cost, and profit per product."
+    },
+    "sellerAssignment": {
+      "title": "Seller Assignment",
+      "description": "Assign products to different sellers."
+    },
+    "topSelling": {
+      "title": "Top Selling Products",
+      "description": "View a chart or table of top-selling products."
+    },
+    "auth": {
+        "unauthorized": "Unauthorized Access",
+        "signInToAccess": "Please sign in as an administrator to access this page."
+    },
+    "footer": {
+        "copyrightText": "GlobalMarket Admin. All rights reserved."
+    }
+  }
+}

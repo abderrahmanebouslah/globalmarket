@@ -1,0 +1,105 @@
+{
+  "trendingProducts": {
+    "title": "Produits tendance",
+    "description": "Découvrez les derniers produits populaires",
+    "viewAll": "Voir tous les produits tendance",
+    "bySeller": "par {{sellerName}}"
+  },
+  "productCard": {
+    "addToCart": "Ajouter au panier",
+    "addToWishlist": "Ajouter à la liste de souhaits",
+    "removeFromWishlist": "Retirer de la liste de souhaits",
+    "outOfStock": "Épuisé",
+    "onlyLeft": "Plus que {{count}} !",
+    "quickAdd": "Ajout rapide",
+    "selectOption": "Sélectionner une option",
+    "cancel": "Annuler",
+    "freeShipping": "Livraison gratuite"
+  },
+  "navigation": {
+    "home": "Accueil",
+    "products": "Produits",
+    "categories": "Catégories",
+    "account": "Compte",
+    "cart": "Panier",
+    "admin": "Admin"
+  },
+  "product": {
+    "size": "Taille",
+    "gender": "Genre",
+    "unisex": "Unisexe",
+    "boy": "Garçon",
+    "girl": "Fille"
+  },
+  "general": {
+    "loading": "Chargement...",
+    "next": "Suivant",
+    "previous": "Précédent"
+  },
+  "header": {
+    "tagline": "Commerce Mondial",
+    "searchPlaceholder": "Rechercher produits, marques, catégories...",
+    "searchPlaceholderMobile": "Rechercher produits...",
+    "searchButton": "Rechercher"
+  },
+  "auth": {
+    "signIn": "Se connecter",
+    "joinNow": "S'inscrire",
+    "signOut": "Se déconnecter"
+  },
+  "profile": {
+    "settings": "Paramètres du profil",
+    "orderHistory": "Historique des commandes"
+  },
+  "ariaLabels": {
+    "navigateToHome": "Aller à la page d'accueil",
+    "selectLanguage": "Choisir la langue",
+    "userMenu": "Menu utilisateur",
+    "wishlist": "Liste de souhaits",
+    "cart": "Panier d'achats",
+    "toggleMobileMenu": "Basculer le menu mobile"
+  },
+  "navigation": {
+    "home": "Accueil",
+    "products": "Produits",
+    "categories": "Catégories",
+    "account": "Compte",
+    "cart": "Panier",
+    "admin": "Admin",
+    "dashboard": "Tableau de bord",
+    "marketplace": "Marché",
+    "adminPanel": "Panneau d'administration",
+    "sellerDashboard": "Tableau de bord vendeur"
+  },
+  "adminDashboard": {
+    "title": "Tableau de bord Admin",
+    "subtitle": "Gérez les opérations de votre marché.",
+    "viewProducts": {
+      "title": "Voir tous les produits",
+      "description": "Parcourez et filtrez tous les produits du système."
+    },
+    "productManagement": {
+      "title": "Gestion des produits",
+      "description": "Ajoutez, modifiez ou supprimez des produits."
+    },
+    "revenueAnalytics": {
+      "title": "Analyse des revenus",
+      "description": "Visualisez le revenu total, le coût du capital et le profit par produit."
+    },
+    "sellerAssignment": {
+      "title": "Assignation des vendeurs",
+      "description": "Assignez des produits à différents vendeurs."
+    },
+    "topSelling": {
+      "title": "Meilleures ventes de produits",
+      "description": "Visualisez un graphique ou un tableau des produits les plus vendus."
+    },
+    "auth": {
+        "unauthorized": "Accès non autorisé",
+        "signInToAccess": "Veuillez vous connecter en tant qu'administrateur pour accéder à cette page."
+    },
+    "footer": {
+        "copyrightText": "Admin GlobalMarket. Tous droits réservés."
+    }
+  }
+}

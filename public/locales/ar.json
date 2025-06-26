@@ -1,0 +1,105 @@
+{
+  "trendingProducts": {
+    "title": "المنتجات الرائجة",
+    "description": "اكتشف أحدث المنتجات الشائعة",
+    "viewAll": "عرض جميع المنتجات الرائجة",
+    "bySeller": "بواسطة {{sellerName}}"
+  },
+  "productCard": {
+    "addToCart": "أضف إلى السلة",
+    "addToWishlist": "أضف إلى قائمة الرغبات",
+    "removeFromWishlist": "إزالة من قائمة الرغبات",
+    "outOfStock": "نفذ المخزون",
+    "onlyLeft": "تبقى {{count}} فقط!",
+    "quickAdd": "إضافة سريعة",
+    "selectOption": "اختر خيارًا",
+    "cancel": "إلغاء",
+    "freeShipping": "شحن مجاني"
+  },
+  "navigation": {
+    "home": "الرئيسية",
+    "products": "المنتجات",
+    "categories": "الفئات",
+    "account": "الحساب",
+    "cart": "السلة",
+    "admin": "لوحة التحكم"
+  },
+  "product": {
+    "size": "المقاس",
+    "gender": "الجنس",
+    "unisex": "للجنسين",
+    "boy": "ولد",
+    "girl": "بنت"
+  },
+  "general": {
+    "loading": "جاري التحميل...",
+    "next": "التالي",
+    "previous": "السابق"
+  },
+  "header": {
+    "tagline": "تجارة عالمية",
+    "searchPlaceholder": "ابحث عن المنتجات، العلامات التجارية، الفئات...",
+    "searchPlaceholderMobile": "ابحث عن المنتجات...",
+    "searchButton": "بحث"
+  },
+  "auth": {
+    "signIn": "تسجيل الدخول",
+    "joinNow": "انضم الآن",
+    "signOut": "تسجيل الخروج"
+  },
+  "profile": {
+    "settings": "إعدادات الملف الشخصي",
+    "orderHistory": "سجل الطلبات"
+  },
+  "ariaLabels": {
+    "navigateToHome": "الانتقال إلى الصفحة الرئيسية",
+    "selectLanguage": "اختار اللغة",
+    "userMenu": "قائمة المستخدم",
+    "wishlist": "قائمة الرغبات",
+    "cart": "سلة التسوق",
+    "toggleMobileMenu": "تبديل القائمة المحمولة"
+  },
+  "navigation": {
+    "home": "الرئيسية",
+    "products": "المنتجات",
+    "categories": "الفئات",
+    "account": "الحساب",
+    "cart": "السلة",
+    "admin": "لوحة التحكم",
+    "dashboard": "لوحة القيادة",
+    "marketplace": "السوق",
+    "adminPanel": "لوحة الإدارة",
+    "sellerDashboard": "لوحة تحكم البائع"
+  },
+  "adminDashboard": {
+    "title": "لوحة تحكم المسؤول",
+    "subtitle": "إدارة عمليات السوق الخاص بك.",
+    "viewProducts": {
+      "title": "عرض جميع المنتجات",
+      "description": "تصفح وتصفية جميع المنتجات في النظام."
+    },
+    "productManagement": {
+      "title": "إدارة المنتجات",
+      "description": "إضافة أو تعديل أو حذف المنتجات."
+    },
+    "revenueAnalytics": {
+      "title": "تحليلات الإيرادات",
+      "description": "عرض إجمالي الإيرادات وتكلفة رأس المال والربح لكل منتج."
+    },
+    "sellerAssignment": {
+      "title": "تعيين البائعين",
+      "description": "تعيين المنتجات لبائعين مختلفين."
+    },
+    "topSelling": {
+      "title": "المنتجات الأكثر مبيعًا",
+      "description": "عرض مخطط أو جدول للمنتجات الأكثر مبيعًا."
+    },
+    "auth": {
+        "unauthorized": "وصول غير مصرح به",
+        "signInToAccess": "يرجى تسجيل الدخول كمسؤول للوصول إلى هذه الصفحة."
+    },
+    "footer": {
+        "copyrightText": "لوحة تحكم GlobalMarket. جميع الحقوق محفوظة."
+    }
+  }
+}
